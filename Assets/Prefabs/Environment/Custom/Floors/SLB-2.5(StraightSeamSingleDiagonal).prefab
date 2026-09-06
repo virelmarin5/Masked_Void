@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1922146711169375019}
   - component: {fileID: 4543828332691900048}
   - component: {fileID: 2780408510782545909}
-  - component: {fileID: 3955653206538244054}
+  - component: {fileID: 7594061144566393438}
   m_Layer: 0
   m_Name: SLB-2.5(StraightSeamSingleDiagonal)
   m_TagString: Untagged
@@ -93,7 +93,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3955653206538244054
+--- !u!65 &7594061144566393438
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,4 +113,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 5, y: 4.9999995, z: 2.9999995}
-  m_Center: {x: 0, y: 0, z: 1.4999998}
+  m_Center: {x: -2.5, y: 2.4999998, z: -1.4999998}

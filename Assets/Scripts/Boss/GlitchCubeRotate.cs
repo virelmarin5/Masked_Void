@@ -70,7 +70,6 @@ public class GlitchCubeRotate : MonoBehaviour
 
         // per cube state, all these stay the same length as cubes.
         // parallel arrays rather than a struct so the whole thing is one allocation.
-        Quaternion[] fromRot;
         fromRot = new Quaternion[cubes.Length];
         toRot = new Quaternion[cubes.Length];
         fromScale = new Vector3[cubes.Length];
