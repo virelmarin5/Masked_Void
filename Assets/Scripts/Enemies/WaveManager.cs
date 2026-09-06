@@ -129,7 +129,9 @@ public class WaveManager : MonoBehaviour, IWaveHost
     // which type the last roll picked, held between the roll and the spawn
     [HideInInspector] EnemyType typeSpawned;
 
-    void Awake()
+
+
+    private void Awake()
     {
         if (instance != null && instance != this)
         {
@@ -138,13 +140,13 @@ public class WaveManager : MonoBehaviour, IWaveHost
         }
 
         instance = this;
-
         waveHost.active = this;
 
-        assignSpawnPoints(spawnPointTransforms);
         assignRoamPoints(roamPointTransforms);
-
+        assignSpawnPoints(spawnPointTransforms);
     }
+
+
 
     void Start()
     {

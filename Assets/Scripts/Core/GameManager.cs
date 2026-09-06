@@ -171,18 +171,36 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("cached controller off the player object, found in Start")]
     public PlayerController playerScript;
-
     int currentKill = 0;
 
-    void Awake()
+    [Header("Bootstrap Shenanigans")]
+    [SerializeField] private bool isBootstrapVersion = false;
+
+    private void Awake()
     {
-        if (instance != null && instance != this)
+        // No conflict? Just take the slot.
+        if (instance == null || instance == this)
         {
+            instance = this;
+            if (isBootstrapVersion)
+                DontDestroyOnLoad(gameObject);
+            return;
+        }
+
+        // Conflict: another GameManager already exists.
+        // Rule: Level always beats Bootstrap.
+
+        if (isBootstrapVersion)
+        {
+            // We are Bootstrap. The existing manager (level or another bootstrap) stays.
+            // Destroy SELF (current).
             Destroy(gameObject);
             return;
         }
-        instance = this;
 
+        // We are Level. Destroy the PREVIOUS manager (bootstrap or old level).
+        Destroy(instance.gameObject);
+        instance = this;
     }
 
     private void Start()
