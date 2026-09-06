@@ -51,7 +51,7 @@ public class LevelLoader : MonoBehaviour
     public static string requestedLevelName = "";
 
     // scene name of the level scene that is currently loaded, or empty if no level scene is loaded
-    private static string currentLevel = "";
+    private string currentLevel = "";
 
     public string CurrentLevel => currentLevel;
 
@@ -89,16 +89,21 @@ public class LevelLoader : MonoBehaviour
 
     public IEnumerator LoadLevel(string levelName)
     {
-        if (!string.IsNullOrEmpty(currentLevel))
+        Scene previous = SceneManager.GetSceneByName(currentLevel);
+
+        // something else can unload the level behind our back, and UnloadSceneAsync
+        // throws on a name that is no longer loaded rather than returning null
+        if (previous.IsValid() && previous.isLoaded)
         {
-            AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(previous);
+
             while (!unload.isDone)
             {
                 yield return null;
             }
-
-            currentLevel = "";
         }
+
+        currentLevel = "";
 
         AsyncOperation load = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
         while (!load.isDone)

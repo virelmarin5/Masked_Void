@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 274694000416288772, guid: 7618acddf8b789e4984683308483531d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -43.62752
       objectReference: {fileID: 0}
     - target: {fileID: 274694000416288772, guid: 7618acddf8b789e4984683308483531d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.38167
       objectReference: {fileID: 0}
     - target: {fileID: 274694000416288772, guid: 7618acddf8b789e4984683308483531d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 274694000416288772, guid: 7618acddf8b789e4984683308483531d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -48,12 +48,43 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 962411314501888049, guid: 7618acddf8b789e4984683308483531d, type: 3}
+      propertyPath: maxWaves
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 962411314501888049, guid: 7618acddf8b789e4984683308483531d, type: 3}
+      propertyPath: basicEnemyPercent
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 962411314501888049, guid: 7618acddf8b789e4984683308483531d, type: 3}
+      propertyPath: heavyEnemyPercent
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 962411314501888049, guid: 7618acddf8b789e4984683308483531d, type: 3}
+      propertyPath: roamPointTransforms.Array.size
+      value: 47
+      objectReference: {fileID: 0}
     - target: {fileID: 1290622155842198742, guid: 7618acddf8b789e4984683308483531d, type: 3}
       propertyPath: m_Name
-      value: GameManager-Base
+      value: GameManager-ColdStorage
       objectReference: {fileID: 0}
+    - target: {fileID: 3800786014925651795, guid: 7618acddf8b789e4984683308483531d, type: 3}
+      propertyPath: loseScoreText
+      value: 
+      objectReference: {fileID: 1016445199926016279}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7618acddf8b789e4984683308483531d, type: 3}
+--- !u!114 &1016445199926016279 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 61711526711287241, guid: 7618acddf8b789e4984683308483531d, type: 3}
+  m_PrefabInstance: {fileID: 1062882258485109982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

@@ -4213,7 +4213,7 @@ MonoBehaviour:
   controlsMenu: {fileID: 584412602041140521}
   pauseScorePanel: {fileID: 7519360979412167789}
   pauseScoreText: {fileID: 4664919490170801778}
-  loseSoreText: {fileID: 5318381616326569083}
+  loseScoreText: {fileID: 5318381616326569083}
   killCounter: {fileID: 2771808462546168966}
   waveCounter: {fileID: 8166577456282206635}
   waveCountdownText: {fileID: 1626770424952145696}
@@ -4221,7 +4221,6 @@ MonoBehaviour:
   interactionUI: {fileID: 2547185410297096399}
   interactionText: {fileID: 1785914017542219402}
   interactionKey: {fileID: 2894987178597124539}
-  playerSpawnPos: {fileID: 0}
   playerStaminaBar: {fileID: 8963909688435529413}
   checkpointPopup: {fileID: 0}
   totalBytes: 0
@@ -4232,11 +4231,11 @@ MonoBehaviour:
   damageFlashUI: {fileID: 3287962508503699587}
   ammoPanel: {fileID: 8511037225253814699}
   magAmmoUI: {fileID: 5822341574044352827}
-  totalAmmoUI: {fileID: 2360485181314911540}
   activeWeapon: {fileID: 3335358677308166473}
   isPaused: 0
   player: {fileID: 0}
   playerScript: {fileID: 0}
+  isBootstrapVersion: 0
 --- !u!114 &6352464566426542894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4326,17 +4325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c52b5e83b85708345a2f81eb37ae815e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::heartbeatManager
-  restingBPM: 20
-  maxBPM: 200
-  currentBPM: 0
+  config: {fileID: 11400000, guid: 7eee900413230d74d9b7d893633401f0, type: 2}
+  currentBpm: 0
   currentStress: 0
-  maxStress: 100
-  stressDecayRate: 3
-  shootStress: 4
-  damageStress: 20
-  nearMissStress: 5
-  killStressReduction: 5
-  waveStressReduction: 20
   heartRateText: {fileID: 1631068944524936492}
   bpmSuffix: ' BPM'
 --- !u!1 &1270564584762302366
@@ -15060,8 +15051,6 @@ MonoBehaviour:
   meleeReturnDuration: 0.12
   meleeSwingRotation: {x: 35, y: -70, z: 20}
   meleeSwingPosition: {x: 0.08, y: -0.05, z: 0.15}
-  aimRotationSpeed: 25
-  maxAimDistance: 500
   aimTargetLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -26128,6 +26117,7 @@ MonoBehaviour:
   maxWaves: 10
   waitingForNextWave: 0
   currentWave: 0
+  economy: {fileID: 0}
 --- !u!1 &7187522398232269439
 GameObject:
   m_ObjectHideFlags: 0
