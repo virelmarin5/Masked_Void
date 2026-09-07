@@ -120,7 +120,7 @@ public class TitleScreenManager : MonoBehaviour
         nav.SetActive(false);
         deactivateAllPanels();
 
-        LevelLoader.requestedLevelName = "DevinC";
+        LevelLoader.requestedLevelName = "dclevel";
         StartCoroutine(LoadSceneAsync("Bootstrap"));
     }
     public void openLevelMark()
