@@ -149,6 +149,7 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
         jump();
 
         Vector3 finalVelocity = (moveDir * currSpeed) + playerVel;
+        controller.Move(finalVelocity * Time.unscaledDeltaTime);
 
         if (controller.isGrounded && isMoving)
         {

@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::playerController
   controller: {fileID: 8618862431611356904}
-  speed: 4
-  sprintMod: 2
+  speed: 2
+  sprintMod: 5
   jumpSpeed: 10
   jumpMax: 1
   gravity: 35
@@ -204,12 +204,8 @@ MonoBehaviour:
   throwForce: 8
   throwUpwardForce: 2
   playerShield: {fileID: 1163693913067826184}
-  maxStamina: 50
-  staminaDrainRate: 11
-  staminaRegenRate: 6
-  sprintForwardOnly: 1
-  stepInterval: 0.8
   weaponHoldPos: {fileID: 4204048334989622671}
+  stepInterval: 0.8
 --- !u!114 &7039411983326474933
 MonoBehaviour:
   m_ObjectHideFlags: 0

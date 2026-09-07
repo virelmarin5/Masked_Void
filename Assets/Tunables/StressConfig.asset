@@ -16,8 +16,14 @@ MonoBehaviour:
   maxBpm: 200
   maxStress: 100
   stressDecayRate: 3
-  damagedStress: 20
+  decayDelay: 1
+  idleDecayRate: 6
+  damagedStress: 5
   nearMissStress: 5
   shootingStress: 4
+  maxMovementBpm: 120
+  movementStress: 11.55
+  minFallSpeedForStress: 6
+  fallStressPerUnitSpeed: 1
   killStressRelief: 10
   waveEndStressRelief: 30
