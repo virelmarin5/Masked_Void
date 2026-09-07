@@ -26,6 +26,8 @@ public class GunStats : WeaponStats
     [Header("Projectile")]
     [Tooltip("bullet prefab, needs a Damage component on it")]
     [SerializeField] public Transform bullet;
+    [Tooltip("Optional bullet that is slower, meant to be used by enemies")]
+    [SerializeField] public Transform enemyBullet;
 
     [Header("Spawn Position")]
     [Tooltip("offset of the model in the player's hand")]

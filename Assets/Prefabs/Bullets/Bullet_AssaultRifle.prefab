@@ -54,7 +54,9 @@ MonoBehaviour:
   rb: {fileID: 7083418051938216941}
   damageAmount: 2
   damageRate: 0.1
-  bulletSpeed: 5
+  bulletSpeed: 55
+  launchSpeed: 15
+  launchDuration: 0.2
   bulletDestroyTime: 5
   shatterForce: 800
   deflectLayer:
@@ -65,8 +67,12 @@ MonoBehaviour:
   explosionForce: 1000
   explosionRadius: 5
   explosionDamage: 50
+  maxShakeDistance: 20
+  shakeDuration: 0.3
+  maxShakeStrength: {x: 0.25, y: 0.25, z: 0.25}
   sfxSource: {fileID: 0}
   sfx: {fileID: 0}
+  sourceWeapon: {fileID: 0}
   isExplosive: 0
 --- !u!33 &7603304608557851629
 MeshFilter:

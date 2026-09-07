@@ -54,10 +54,10 @@ MonoBehaviour:
   agent: {fileID: 41331064655073898}
   config: {fileID: 11400000, guid: 9875b038af008b743bb2773fd86e2913, type: 2}
   attackRate: 0.5
-  roamTarget: {fileID: 0}
   hasLeftSpawnRoom: 0
   willRoam: 0
   roamPoint: {fileID: 0}
+  roamTarget: {fileID: 0}
   weapon: {fileID: 6413440490822234159, guid: a04645d8876d1a448ad847390068b125, type: 3}
   handPos: {fileID: 509105239251634250}
 --- !u!33 &2420307151298392500
@@ -150,7 +150,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 1.6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

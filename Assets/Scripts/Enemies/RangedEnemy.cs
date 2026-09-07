@@ -70,7 +70,6 @@ public class RangedEnemy : EnemyBase
     // fires one round at the player, skewed if ghost protocol is running
     void shoot()
     {
-        currentAmmo--;
         attackTimer = 0f;
 
         if (AudioManager.instance != null)
@@ -94,7 +93,8 @@ public class RangedEnemy : EnemyBase
 
             Quaternion shotRotation = gunPivot.rotation * Quaternion.Euler(spreadX, spreadY, 0f);
 
-            Instantiate(activeGun.bullet, gunBarrel.position, shotRotation);
+            Transform bulletToFire = activeGun.enemyBullet != null ? activeGun.enemyBullet : activeGun.bullet;
+            Instantiate(bulletToFire, gunBarrel.position, shotRotation);
         }
     }
 

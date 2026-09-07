@@ -45,7 +45,7 @@ public class TimeManager : MonoBehaviour
 
     [Header("Firing Pulse")]
     [Tooltip("How long a shot pushes time scale toward the pulse value, seconds")]
-    [SerializeField] private float firePulseDuration = .15f;
+    [SerializeField] private float firePulseDuration = .05f;
     [Tooltip("Time scale target during a firing pulse")]
     [SerializeField] private float firePulseTimeScale = 1f;
 

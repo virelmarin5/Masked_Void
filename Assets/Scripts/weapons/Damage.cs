@@ -42,7 +42,13 @@ public class Damage : MonoBehaviour
 
     [Header("Bullet")]
     [Tooltip("launch speed, applied once on spawn")]
-    [Range(1, 80)][SerializeField] int bulletSpeed;
+    [Range(0, 80)][SerializeField] float bulletSpeed;
+
+    [Tooltip("Higher speed for the initial burst after firing, so a slow bullet still outruns its own shooter")]
+    [Range(0f, 80f)][SerializeField] float launchSpeed = 5f;
+
+    [Tooltip("Seconds the launch burst lasts before easing down to bullet speed")]
+    [SerializeField] float launchDuration = .2f;
 
     [Tooltip("seconds before the bullet deletes itself if it hits nothing")]
     [Range(.1f, 20)][SerializeField] int bulletDestroyTime;
@@ -97,6 +103,7 @@ public class Damage : MonoBehaviour
     bool hasHit = false;
     int enemyLayer;
     bool hasAudioManager;
+    float flightTime;
 
     void Start()
     {
@@ -145,7 +152,18 @@ public class Damage : MonoBehaviour
         if (type == DamageType.bullet)
         {
             rb.useGravity = false;
-            rb.linearVelocity = transform.forward * bulletSpeed;
+
+            float currentSpeed = bulletSpeed;
+
+            if (launchSpeed > 0 && flightTime < launchDuration)
+            {
+                float t = flightTime / launchSpeed;
+                currentSpeed = Mathf.Lerp(launchSpeed, bulletSpeed, t);
+            }
+
+            rb.linearVelocity = transform.forward * currentSpeed;
+            flightTime += Time.fixedDeltaTime;
+
             Destroy(gameObject, bulletDestroyTime);
         }
     }
