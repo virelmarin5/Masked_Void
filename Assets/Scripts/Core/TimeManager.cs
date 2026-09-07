@@ -34,26 +34,20 @@ public class TimeManager : MonoBehaviour
 
     [Header("Time Scale Range")]
     [Tooltip("slowest the world ever runs, reached when standing still")]
-    [SerializeField] private float minTimeScale = 0.05f;
+    [SerializeField] private float minTimeScale = 0.1f;
 
     [Tooltip("fastest the world ever runs, only reached at high stress")]
     [SerializeField] private float maxTimeScale = 1f;
 
-    [Tooltip("fastest movement alone can push time, deliberately below max so stress still matters")]
-    [SerializeField] private float moveMaxTimeScale = 0.85f;
-
-    [Header("Movement Influence")]
-    [Tooltip("Higher values require more movement before time speeds up strongly.")]
-    [SerializeField] private float movementCurvePower = 1.35f;
-
-    [Header("Heartbeat Influence")]
-    [Tooltip("how much full stress pushes time toward max, 0 means stress does nothing")]
-    [Range(0f, 1f)]
-    [SerializeField] private float bpmInfluence = 0.40f;
-
     [Header("Smoothing")]
     [Tooltip("how fast time reaches its target, higher snaps harder, 0 freezes the current scale")]
     [SerializeField] private float timeScaleSmoothing = 10f;
+
+    [Header("Firing Pulse")]
+    [Tooltip("How long a shot pushes time scale toward the pulse value, seconds")]
+    [SerializeField] private float firePulseDuration = .15f;
+    [Tooltip("Time scale target during a firing pulse")]
+    [SerializeField] private float firePulseTimeScale = 1f;
 
     [Header("Runtime Override")]
     [Tooltip("true while a scorestreak is forcing the speed, set at runtime")]
@@ -67,6 +61,8 @@ public class TimeManager : MonoBehaviour
 
     // the project's physics step at timeScale 1, so scaling stays proportional
     private float baseFixedDeltaTime;
+
+    private float firePulseTimer;
 
     private void Awake()
     {
@@ -99,34 +95,19 @@ public class TimeManager : MonoBehaviour
             // over world speed. Movement and heartbeat cannot fight it.
             targetTimeScale = overrideTimeScale;
         }
+        else if(firePulseTimer > 0f)
+        {
+            // A shot just fired. Push time toward the pulse value for a short window
+            // regardless of bpm, then fall back to the bpm-driven target.
+
+            firePulseTimer -= Time.unscaledDeltaTime;
+            targetTimeScale = firePulseTimeScale;
+        }
         else
         {
-            if (GameManager.instance == null || GameManager.instance.playerScript == null)
-                return;
+            float stress01 = HeartbeatManager.instance != null ? HeartbeatManager.instance.StressPercent : 0f;
 
-            float movement01 = Mathf.Clamp01(
-                GameManager.instance.playerScript.SpeedPercent
-            );
-
-            movement01 = Mathf.Pow(movement01, movementCurvePower);
-
-            float movementScale = Mathf.Lerp(
-                minTimeScale,
-                moveMaxTimeScale,
-                movement01
-            );
-
-            float stress01 = HeartbeatManager.instance != null
-                ? HeartbeatManager.instance.StressPercent
-                : 0f;
-
-            float heartbeatInfluence = Mathf.Clamp01(stress01 * bpmInfluence);
-
-            targetTimeScale = Mathf.Lerp(
-                movementScale,
-                maxTimeScale,
-                heartbeatInfluence
-            );
+            targetTimeScale = Mathf.Lerp(minTimeScale,maxTimeScale, stress01);
         }
 
         // Frame-rate-independent exponential smoothing.
@@ -137,8 +118,6 @@ public class TimeManager : MonoBehaviour
             targetTimeScale,
             blend
         );
-
-
 
         ApplyTimeScale(currentTimeScale);
     }
@@ -210,14 +189,16 @@ public class TimeManager : MonoBehaviour
         ApplyTimeScale(currentTimeScale);
     }
 
+    public void PulseFireTimeScale()
+    {
+        firePulseTimer = firePulseDuration;
+    }
+
     private void OnValidate()
     {
         minTimeScale = Mathf.Max(0.001f, minTimeScale);
         maxTimeScale = Mathf.Max(minTimeScale, maxTimeScale);
-        moveMaxTimeScale = Mathf.Clamp(moveMaxTimeScale, minTimeScale, maxTimeScale);
-        movementCurvePower = Mathf.Max(0.01f, movementCurvePower);
         timeScaleSmoothing = Mathf.Max(0f, timeScaleSmoothing);
-        bpmInfluence = Mathf.Clamp01(bpmInfluence);
 
         if (hasTimeScaleOverride)
             overrideTimeScale = Mathf.Clamp(overrideTimeScale, minTimeScale, maxTimeScale);

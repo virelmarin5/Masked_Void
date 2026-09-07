@@ -286,11 +286,25 @@ public class WeaponManager : MonoBehaviour
     public void Attack()
     {
         if (activeWeapon == null || attackTimer < UpgradeFireRate)
+        {
             return;
+        }
+
         if (currentAmmo <= 0)
-        { AudioManager.instance.PlayEmptyMag(); return; }
+        {
+            AudioManager.instance.PlayEmptyMag();
+            return;
+        }
+
         if (HeartbeatManager.instance != null)
+        {
             HeartbeatManager.instance.PlayerShot();
+        }
+
+        if(TimeManager.instance != null)
+        {
+            TimeManager.instance.PulseFireTimeScale();
+        }
 
         attackTimer = 0f;
         currentAmmo--;

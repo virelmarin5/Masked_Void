@@ -68,40 +68,25 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
     [Tooltip("empty transform the equipped weapon parents to")]
     public GameObject weaponHoldPos;
 
-    [Header("Stamina")]
-    [Tooltip("seconds of sprint from full")]
-    [SerializeField] float maxStamina = 5f;
-
-    [Tooltip("stamina used per second while sprinting")]
-    [SerializeField] float staminaDrainRate = 1f;
-
-    [Tooltip("stamina recovered per second while not sprinting")]
-    [SerializeField] float staminaRegenRate = 1f;
-
-    [Tooltip("stops sprinting sideways or backwards")]
-    [SerializeField] bool sprintForwardOnly = true;
-
     [Header("Footsteps")]
     [Tooltip("seconds between step sounds while moving on the ground")]
     [SerializeField] float stepInterval = 0.4f;
 
     // runtime state
-    float currentStamina;
     float stepTimer;
     int jumpCount;
     Vector3 moveDir;
     Vector3 playerVel;
+    bool wasGrounded;
 
     void Start()
     {
-        currentStamina = maxStamina;
-        ;
+
     }
 
     void Update()
     {
         movement();
-        UpdatePlayerUI();
     }
     public void PushBack(Vector3 direction, float pushbackForce)
     {
@@ -126,9 +111,16 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
 
         if (controller.isGrounded)
         {
+            if (!wasGrounded && HeartbeatManager.instance != null)
+            {
+                HeartbeatManager.instance.AddFallStess(Mathf.Abs(playerVel.y));
+            }
+
             playerVel.y = 0;
             jumpCount = 0;
         }
+
+        wasGrounded = controller.isGrounded;
 
         float hInput = Input.GetAxisRaw("Horizontal");
         float vInput = Input.GetAxisRaw("Vertical");
@@ -138,31 +130,17 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
         bool isMoving = moveDir.sqrMagnitude > 0.01f;
         bool isMovingForward = vInput > 0;
 
-        bool canSprint = isMoving && currentStamina > 0.01f;
-        if (sprintForwardOnly)
-            canSprint &= isMovingForward;
-
-        bool isSprinting = Input.GetButton("Sprint") && canSprint;
-
-        if (isSprinting)
+        if (HeartbeatManager.instance != null)
         {
-            currentStamina -= staminaDrainRate * Time.unscaledDeltaTime;
-            if (currentStamina <= 0.01f)
+            HeartbeatManager.instance.NotifyMoving(isMoving);
+            if (isMoving)
             {
-                currentStamina = 0.01f;
-                isSprinting = false;
-            }
-        }
-        else
-        {
-            if (currentStamina < maxStamina)
-            {
-                currentStamina += staminaRegenRate * Time.unscaledDeltaTime;
-                currentStamina = Mathf.Min(currentStamina, maxStamina);
+                HeartbeatManager.instance.AddMovementStress(Time.unscaledDeltaTime);
             }
         }
 
-        int currSpeed = isSprinting ? speed * sprintMod : speed;
+        float stressPercent = HeartbeatManager.instance != null ? HeartbeatManager.instance.StressPercent : 0f;
+        int currSpeed = Mathf.RoundToInt(speed * Mathf.Lerp(1f, sprintMod,stressPercent));
 
         playerVel.x = Mathf.MoveTowards(playerVel.x, 0, pushbackFriction * Time.unscaledDeltaTime);
         playerVel.z = Mathf.MoveTowards(playerVel.z, 0, pushbackFriction * Time.unscaledDeltaTime);
@@ -179,7 +157,7 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
             if (stepTimer <= 0f && AudioManager.instance != null)
             {
                 AudioManager.instance.PlaySteps();
-                stepTimer = isSprinting ? (stepInterval / sprintMod) : stepInterval;
+                stepTimer = stepInterval;
             }
         }
         else
@@ -247,11 +225,4 @@ public class PlayerController : MonoBehaviour, IPickWeapon, IDamage
         playerShield.SetActive(false);
         //KillChainManager.instance.activatePlayershield = false;
     }
-
-    public void UpdatePlayerUI()
-    {
-        GameManager.instance.playerStaminaBar.fillAmount = (float)currentStamina / maxStamina;
-
-    }
-
 }

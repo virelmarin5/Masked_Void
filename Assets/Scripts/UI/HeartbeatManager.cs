@@ -63,6 +63,10 @@ public class HeartbeatManager : MonoBehaviour
     private float stressPercent;
     private bool hasLost;
 
+    private float lastStressGainTime;
+
+    private bool isPlayerMoving;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -97,16 +101,19 @@ public class HeartbeatManager : MonoBehaviour
 
     private void DecayStress()
     {
-        if (currentStress <= 0f || config.stressDecayRate <= 0f)
+        if (currentStress <= 0f)
+        {
             return;
+        }
 
-        float newStress = Mathf.MoveTowards(
-            currentStress,
-            0f,
-            config.stressDecayRate * Time.unscaledDeltaTime
-        );
+        if (Time.unscaledTime - lastStressGainTime < config.decayDelay)
+        {
+            return;
+        }
 
-        SetStress(newStress);
+        float rate = isPlayerMoving ? config.stressDecayRate : config.idleDecayRate;
+
+        SetStress(Mathf.MoveTowards(currentStress, 0f, rate * Time.unscaledDeltaTime));
     }
 
     private void SetStress(float newStress)
@@ -114,7 +121,14 @@ public class HeartbeatManager : MonoBehaviour
         float clampedStress = Mathf.Clamp(newStress, 0f, config.maxStress);
 
         if (Mathf.Approximately(clampedStress, currentStress))
+        {
             return;
+        }
+
+        if (clampedStress > currentStress)
+        {
+            lastStressGainTime = Time.unscaledTime;
+        }
 
         currentStress = clampedStress;
 
@@ -245,6 +259,42 @@ public class HeartbeatManager : MonoBehaviour
 
     public float CurrentStress => currentStress;
 
+    public void NotifyMoving(bool moving)
+    {
+        isPlayerMoving = moving;
+    }
+
+    public void AddMovementStress(float deltaTime)
+    {
+        AddCappedMovementStress(config.movementStress * deltaTime);
+    }
+
+    public void AddFallStess(float landingSpeed)
+    {
+        float amount = Mathf.Max(0f, landingSpeed - config.minFallSpeedForStress) * config.fallStressPerUnitSpeed;
+        AddCappedMovementStress(amount);
+    }
+
+    private void AddCappedMovementStress(float amount)
+    {
+        if (amount <= 0f || hasLost)
+        {
+            return;
+        }
+
+        if (KillstreakManager.instance != null && KillstreakManager.instance.IsInvulnerable)
+        {
+            return;
+        }
+
+        float cap = config.maxStress * Mathf.InverseLerp(config.restingBpm, config.maxBpm, config.maxMovementBpm);
+        if (currentStress >= cap)
+        {
+            return;
+        }
+
+        SetStress(Mathf.Min(currentStress + amount, cap));
+    }
 
     private void OnDestroy()
     {
